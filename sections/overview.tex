@@ -1,0 +1,121 @@
+\begin{frame}
+    \frametitle{Definition}
+    A \textbf{Generative Adversarial Network} is a kind of neural network mainly used for generative tasks. Some tasks in which a GAN has showed good performance are:
+    \begin{itemize}
+        \item Image generation (treated in the following).
+        \item Human language generation.
+        \item Music synthetization.
+    \end{itemize}
+
+    \textbf{Adversarial} = it is inspired from game theory, in which there are two agents who compete with each other in a \emph{zero-sum game}:
+    \begin{itemize}
+        \item The \textbf{generator}.
+        \item The \textbf{discriminator}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Generator model}
+    The \textbf{generator} model learns to transform (usually) uniform noise in the latent space\footnote{Usually called $z$ space in literature} into an image which is \emph{similar} to the ones in the training set:
+    $$\text{Noise} \to \text{Image (synthetic)}$$
+    \img{generator}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Discriminator model}
+    The \textbf{discriminator} model learns to classify fake images apart from the real ones:
+    $$\text{Image (either real or synthetic)} \to \; \in [0,1]$$
+    \img{discriminator}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Full GAN architecture}
+    The full architecture is then built as follows:
+    \begin{enumerate}
+        \item The generator builds fake images (progressively better).
+        \item The discriminator discerns between fake and real images (progressively better).
+    \end{enumerate}
+    \img{gan}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Training and loss}
+
+    \only<1>{Now we only need to establish appropriate loss functions for the two models:
+    \begin{enumerate}
+        \item The generator needs to maximize the discriminator classification error.
+        \item The discriminator needs to minimize its own classification error.
+    \end{enumerate}}
+
+    \only<2>{We can use Binary Cross-Entropy (BCE) and backpropagation for both models:
+    \begin{enumerate}
+        \item The generator updates its weights through evalutation of $n$ generated fakes through the discriminator ($n$ is the batch size).
+        \item Discriminator weights are updated according to the discriminator own predictions over a collection of $n$ real images and $n$ fakes ($\Rightarrow$ $2n$ evaluations in a single step).
+    \end{enumerate}}
+
+    \img{loss}
+\end{frame}
+
+\begin{frame}
+    \frametitle{DCGAN and GAN}
+    What has been showed until now are \textbf{Deep Convolution GANs} or \textbf{DCGANs}. 
+    
+    A \textbf{DCGAN} is a convolutional flavor of the GAN model, which uses features borrowed from modern convolutional neural networks and deep learning in order to attain a \emph{stable} training phase. These features are such as:
+    \begin{itemize}
+        \item Convolutional, batch normalization and flattening layers.
+        \item Learnable downsampling / upsampling in spite of max pooling.
+        \item $\sigma$ layer as the output of the discriminator.
+        \item And more\dots
+    \end{itemize}
+
+    \textbf{GAN} architectures on the other hand simply introduced the two-player zero-sum game between the generator / forger and the discriminator / critic / inspector.
+\end{frame}
+
+\begin{frame}
+    \frametitle{ESRGAN}
+    \textbf{Enhanced Super Resolution GAN}: used for AI image upscaling.
+    \img{esrgan}
+\end{frame}
+
+\begin{frame}
+    \frametitle{GAN issues}
+    GAN has often shown great success in tasks of realistic image generation. Nevertheless, the training process is also known to be \textbf{slow} and \textbf{unstable}. Here are some of the common issues:
+    \begin{itemize}
+        \item Mode collapse.
+        \item Lack of a proper evaluation metric.
+        \item Vanishing gradient.
+        \item Hard-achievable equilibrium.
+        \item Low dimensional supports.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{GAN issues - Mode collapse}
+    During training, \textbf{the generator is able to cheat through a repeated output pattern}. This common failure case is referred to as \textbf{mode collapse}.
+
+    In such a case, it is said that the generator is not able to learn the real-world data distribution and thus prefers to get stuck into a low variety space.
+
+    \img{mode_collapse}
+\end{frame}
+
+\begin{frame}
+    \frametitle{GAN issues - No proper evaluation metric}
+    While working with GANs \textbf{there is not a good function which is able to clearly tell us the progress of the training phase}.
+
+    Without a good metric we cannot\dots
+    \begin{itemize}
+        \item \dots Estimate when do we have to stop.
+        \item \dots Compare the performances of different models.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{GAN issues - Vanishing gradient}
+    Assuming a perfect discriminator, we can intuitively gather that its loss is exactly $0$. When this happens, training may prove very slow.
+    \imgv{GAN_vanishing_gradient}
+    As we can see, the loss decreases very fast in respect to the number of epochs. Therefore, we face a crucial dilemma: \textbf{either we lose a reliable feedback loop, or we gather one at the cost of an extremely slow training of the generator model}.
+\end{frame}
+
+\begin{frame}
+    \frametitle{GAN issues - Hard-achievable equilibrium}
+\end{frame}
