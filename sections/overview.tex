@@ -132,3 +132,18 @@
     \end{itemize}
     All together, \textbf{we need to find the intersection between two low-dimensional manifolds in a higher dimensionality space, and this is very difficult or even impossible}. In the latter, we can prove that we can always find a perfect discriminator.
 \end{frame}
+
+\begin{frame}
+    \frametitle{Wasserstein GAN}
+    Another approach was proposed in the WGAN model. These networks are conceptually based upon the \textbf{Wasserstein distance} or \textbf{Earth Mover's Distance}. This distance measures the distance between two probability distributions as ``the energy spent to transform one distribution into another, as if it was constituted by piles of dirt''.
+    \imgv{emd}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Wasserstein GAN - Pros and Cons}
+    WGANs hope to provide more stable training, but at the following expenses:
+    \begin{itemize}
+        \item Training may still be unstable.
+        \item Either slow convergence or vanishing gradients.
+    \end{itemize}
+\end{frame}
