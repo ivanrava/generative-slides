@@ -14,11 +14,23 @@
 \title[Image generation through DL]{Deep Learning approaches for Image Generation}
 \author[I. Ravasi]{Ivan Ravasi}
 
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
 \begin{document}
     \frame{\titlepage}
-    \section{GAN}
+    \section{Generative Adversarial Networks}
     \input{sections/gan.tex}
-    \section{VAE}
+    \section{Variational Autoencoders}
     \section{Flow}
     \section{Stable Diffusion}
+    \input{sections/sd.tex}
 \end{document}
