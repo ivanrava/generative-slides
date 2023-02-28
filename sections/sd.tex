@@ -39,8 +39,8 @@
     \frametitle{Architecture}
     Stable Diffusion is composed by three different Deep Learning models:
     \begin{itemize}
-        \item A \textbf{variational autoencoder / VAE}, for converting between pixel space and latent space.
-        \item A \textbf{U-net} for denoising the diffused latent representation.
+        \item A \textbf{variational autoencoder / VAE}, for converting between pixel space and latent space (lower-dimensional).
+        \item A \textbf{U-Net} for denoising the diffused latent representation. It is the most computationally-intensive module.
         \item A (optional) \textbf{text encoder} for the image conditioning.
     \end{itemize}
     \img{stablediffusion}
