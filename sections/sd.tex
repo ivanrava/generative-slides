@@ -1,0 +1,54 @@
+\begin{frame}
+    \frametitle{Introduction}
+    \textbf{Stable Diffusion} is a Deep Learning model used for text-to-image generation tasks, released in 2022. It was developed by the CompVis group at the Ludwig Maximilian University of Munich and released together with the companies Runway and Stability AI.
+
+    Stable Diffusion has been publicly released in following forms:
+    \begin{itemize}
+        \item Source code.
+        \item Model weights (an implementation is readily available in Keras, too).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Legal issues and copyright}
+    Stable Diffusion has been trained on \textbf{LAION-5B}, a publicly available dataset derived from Common Crawl scraped data, which contained 5 billion ($5\cdot 10^9$) text-image pairs.
+    Despite the dataset publicity and the heuristic removal of most watermarked images, Stable Diffusion was also trained on a lot of copyrighted image content.
+
+    As such, it raised controversy that \emph{Stable Diffusion claims no rights on generated images and freely gives the users the rights of usage over the generated content, as long as this is not illegal or actively harming individuals}. Nevertheless, images who happen to contain intellectual properties or recognizable individuals are still protected by copyright / personality rights.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Requirements}
+    Another interesting aspect of Stable Diffusion is its \textbf{availability / efficiency}. In fact, Stable Diffusion can run on most consumer-level hardware, like a modest GPU with at least 8 GB VRAM\footnote{All NVIDIA GeForce GPUs from the RTX 30 series (2020) have at least 8 GB of VRAM.}.
+    
+    This is a sparking contrast with other proprietary image generators only available as cloud services, like DALL-E and Midjourney.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Uses}
+    Stable Diffusion can be used for the following tasks:
+    \begin{itemize}
+        \item Image generation from textual prompts.
+        \item Image upscaling.
+        \item Image modification.
+        \item Image inpainting.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Architecture}
+    Stable Diffusion is composed by three different Deep Learning models:
+    \begin{itemize}
+        \item A \textbf{variational autoencoder / VAE}, for converting between pixel space and latent space.
+        \item A \textbf{U-net} for denoising the diffused latent representation.
+        \item A (optional) \textbf{text encoder} for the image conditioning.
+    \end{itemize}
+    \img{stablediffusion}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Text encoder}
+    Stable Diffusion uses a fixed and pretrained \textbf{CLIP ViT-L/14} model.
+
+    It maps text prompts into an embedding space.
+\end{frame}
