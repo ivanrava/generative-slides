@@ -1,7 +1,45 @@
 \begin{frame}
+    \frametitle{Data compression}
+    Key to deep learning is the concept of \emph{information compression}, as it allows the network to learn from more succinct representations and thus \emph{alleviating the overfitting} due to the \emph{curse of dimensionality}.
+
+    \textbf{Autoencoders} are essentially used to compress the input data into a lower-dimensionality space.
+\end{frame}
+
+\begin{frame}
     \frametitle{Autoencoders}
-    An \textbf{autoencoder} is made up of two parts: an encoder and a decoder, with the latent representation (called code) in the middle.
+    An \textbf{autoencoder} is made up of two parts: an encoder and a decoder, with the latent representation (often called \textbf{code}) in the middle.
     $$\text{Encoder} \to \text{Code} \to \text{Decoder}$$
-    They were used in the first DL models, and they are still used today inside the bigger models.
     \img{latent-space}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Autoencoder loss}
+    An autoencoder is usually trained through the minimization of a \textbf{loss} function like the following:
+    $$L=\lVert x - d_\phi(e_\theta(x)) \rVert_2$$
+    This effectively instructs the network to learn an effective compression strategy which is able to reconstruct the original higher-dimension data, at the highest possible fidelity, given the compressed information.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Latent space}
+    \textbf{Latent representation} = spatially-reduced and high-level abstract representation of the target data. Usually found in the middle of an autoencoder architecture.
+
+    Most generative models are unsupervised Deep Learning ones which learn to generate data from the learnt, \textbf{latent representations}.
+    \img{latent-space}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Latent space - Autoencoder}
+    In the following scatter plot we see the clusters forming from the MNIST digits dataset.
+
+    We can see that some subsets of the latent space do not correspond to any data point. We say that \textbf{the latent space is not regularized}.
+
+    This means that we cannot use this latent space as the starting point for any generative tasks, as sampling random points in this space does not warrant a meaningful output from the decoder.
+    \imgv{ae_latent}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Autoencoders and PCA}
+    The latent space learned by an autoencoder strongly resembles the eigenspace achieved through a PCA transform.
+
+    Why should we use autoencoders then? Because PCA is a \emph{linear} transformation, while autoencoders are able to learn complex \emph{nonlinear} functions.
 \end{frame}
