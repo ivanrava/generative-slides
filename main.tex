@@ -11,10 +11,14 @@
     \includegraphics[width=0.5\textwidth]{img/#1}
 \end{center}}
 
-\newenvironment{colab}
-{
+\newcommand{\extheme}{
 \setbeamercolor{background canvas}{bg=gray!20}
 \setbeamercolor{frametitle}{fg=gray!10,bg=BrickRed!150}
+}
+
+\newenvironment{colab}
+{
+\extheme
 \begin{frame}
     \frametitle{Colab Notebook}
 }
@@ -52,5 +56,6 @@
     \section{Stable Diffusion}
     \input{sections/sd.tex}
     \section{Final project}
+    \extheme
     \input{sections/final.tex}
 \end{document}
