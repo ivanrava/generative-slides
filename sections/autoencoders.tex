@@ -15,7 +15,7 @@
 \begin{frame}
     \frametitle{Autoencoder loss}
     An autoencoder is usually trained through the minimization of a \textbf{loss} function like the following:
-    $$L=\lVert x - d_\phi(e_\theta(x)) \rVert_2$$
+    $$L=\lVert x - d(e(x)) \rVert_2$$
     This effectively instructs the network to learn an effective compression strategy which is able to reconstruct the original higher-dimension data, at the highest possible fidelity, given the compressed information.
 \end{frame}
 
@@ -28,18 +28,41 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Latent space - Autoencoder}
-    In the following scatter plot we see the clusters forming from the MNIST digits dataset.
+    \frametitle{Generation purpose}
+    Once we have learned a good autoencoder we can split it into its two components only to keep using the \textbf{decoder} part of the network. Intuitively, given a randomly sampled latent vector in the latent space the decoder alone \emph{should} be able to produce a convincing image output resembling the original data distribution.
+    \img{decoding}
+\end{frame}
 
-    We can see that some subsets of the latent space do not correspond to any data point. We say that \textbf{the latent space is not regularized}.
-
-    This means that we cannot use this latent space as the starting point for any generative tasks, as sampling random points in this space does not warrant a meaningful output from the decoder.
+\begin{frame}
+    \frametitle{Autoencoder latent space - issues}
+    However, \textbf{the latent space learnt by an autoencoder is not regularized}. As such, sampling random points in this space does not warrant a meaningful output from the learned decoder.
     \imgv{ae_latent}
 \end{frame}
 
 \begin{frame}
     \frametitle{Autoencoders and PCA}
-    The latent space learned by an autoencoder strongly resembles the eigenspace achieved through a PCA transform.
+    Another interesting remark: the latent space learned by an autoencoder strongly resembles the eigenspace achieved through a PCA transform.
 
-    Why should we use autoencoders then? Because PCA is a \emph{linear} transformation, while autoencoders are able to learn complex \emph{nonlinear} functions.
+    Nevertheless, PCA is essentially a \emph{linear} transform, while autoencoders are able to learn much complex \emph{nonlinear} transformation maps.
+    \imgv{ae_latent_pca}
+\end{frame}
+
+{
+\setbeamercolor{background canvas}{bg=gray!20}
+\begin{frame}
+    \frametitle{Colab Notebook}
+    Practical activities:
+    \begin{itemize}
+        \item Building and training an autoencoder over the Fashion MNIST dataset.
+        \item Evaluating the model performance.
+        \item Visualize the latent space in 2D.
+    \end{itemize}
+    \colab{colab}
+\end{frame}
+}
+
+\subsection{Variational Autoencoders}
+
+\begin{frame}
+    \frametitle{Variational Autoencoders}
 \end{frame}
