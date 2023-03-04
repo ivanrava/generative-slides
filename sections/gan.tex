@@ -122,23 +122,83 @@
     All together, \textbf{we need to find the intersection between two low-dimensional manifolds in a higher dimensionality space, and this is very difficult or even impossible}. In the latter, we can prove that we can always find a perfect discriminator.
 \end{frame}
 
-\begin{frame}
-    \frametitle{Wasserstein GAN}
-    Another approach was proposed in the WGAN model. These networks are conceptually based upon the \textbf{Wasserstein distance} or \textbf{Earth Mover's Distance}. This distance measures the distance between two probability distributions as ``the energy spent to transform one distribution into another, as if it was constituted by piles of dirt''.
-    \imgv{emd}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Wasserstein GAN - Pros and Cons}
-    WGANs hope to provide more stable training, but at the following expenses:
+\begin{colab}
+    Outline / contents:
     \begin{itemize}
-        \item Training may still be unstable.
-        \item Either slow convergence or vanishing gradients.
+        \item Building and training a DCGAN over the Fashion MNIST and CelebA dataset.
+        \item Evaluating the generative abilities of the so-built DCGANs over the training epochs.
     \end{itemize}
+\end{colab}
+
+%\begin{frame}
+%    \frametitle{Wasserstein GAN}
+%    Another approach was proposed in the WGAN model. These networks are conceptually based upon the \textbf{Wasserstein distance} or \textbf{Earth Mover's Distance}. This distance measures the distance between two probability distributions as ``the energy spent to transform one distribution into another, as if it was constituted by piles of dirt''.
+%    \imgv{emd}
+%\end{frame}
+%
+%\begin{frame}
+%    \frametitle{Wasserstein GAN - Pros and Cons}
+%    WGANs hope to provide more stable training, but at the following expenses:
+%    \begin{itemize}
+%        \item Training may still be unstable.
+%        \item Either slow convergence or vanishing gradients.
+%    \end{itemize}
+%\end{frame}
+%
+%\begin{frame}
+%    \frametitle{ESRGAN}
+%    \textbf{Enhanced Super Resolution GAN}: used for AI image upscaling.
+%    \img{esrgan}
+%\end{frame}
+
+\subsection{Conditional GAN}
+
+\begin{frame}
+    \frametitle{Image translation}
+    \begin{block}{Image-to-image translation}
+        Translating an image into another representation, given sufficient training data.
+    \end{block}
+
+    While many problems translate well to a so-defined task, these have been historically solved through customized and hand-defined solutions.
+
+    Using the GAN idea it is possible to establish a common framework which is able to be generalized to all use cases. \cite{pix2pix}
+
+    \img{translation}
 \end{frame}
 
 \begin{frame}
-    \frametitle{ESRGAN}
-    \textbf{Enhanced Super Resolution GAN}: used for AI image upscaling.
-    \img{esrgan}
+    \frametitle{Conditional GANs}
+    \img{cgan}
+    A \textbf{Conditional GAN} uses the same architecture as a GAN, plus a given \emph{conditioning} (often in the form of the original image or of a one-hot encoded class label).
+
+    \begin{block}{Conditioning}
+        Feeding to the network a given slice of data so as to influence the final output.
+    \end{block}
 \end{frame}
+
+%\begin{frame}
+%    \frametitle{CGAN for image translation}
+%    If a GAN can be formalised as $G: \textbf{z} \to Y$, a CGAN can be formalised to $G: \{X,\textbf{z}\} \to Y$ ($X$ = input image, $Y$ = generated image, $\textbf{z}$ = latent vector).
+%\end{frame}
+
+\subsection{Pix2Pix}
+
+\begin{frame}
+    \frametitle{Pix2Pix architecture}
+    \textbf{Pix2Pix} \cite{pix2pix} is an architecture specifically proposed for image-to-image translation tasks. It is a CGAN where:
+    \begin{itemize}
+        \item The \textbf{generator} is a \textbf{U-Net} with skip connections (so low-level details are able to skip the bottleneck).
+        \item The \textbf{discriminator} is a \textbf{PatchGAN} classifier.
+    \end{itemize}
+    \imgv{pix2pix}
+\end{frame}
+
+\begin{frame}
+    \frametitle{PatchGAN}
+    \textbf{PatchGAN} is a CNN proposed in \cite{pix2pix} for the discriminator part of a GAN. It tries to classify local image \emph{patches} as real or fake (in this way the discriminator penalizes errors happening with high frequency image data).
+
+    In Pix2Pix, the \textbf{PatchGAN} discriminator receives as input the spectral concatenation of both the input and target images.
+    \imgv{patchgan}
+\end{frame}
+
+\subsection{CycleGAN}
