@@ -197,8 +197,31 @@
     \frametitle{PatchGAN}
     \textbf{PatchGAN} is a CNN proposed in \cite{pix2pix} for the discriminator part of a GAN. It tries to classify local image \emph{patches} as real or fake (in this way the discriminator penalizes errors happening with high frequency image data).
 
-    In Pix2Pix, the \textbf{PatchGAN} discriminator receives as input the spectral concatenation of both the input and target images.
+    In Pix2Pix, the \textbf{PatchGAN} discriminator receives as input the spectral concatenation of both images: input and target (either fake or real).
     \imgv{patchgan}
 \end{frame}
 
 \subsection{CycleGAN}
+
+\begin{frame}
+    \frametitle{CycleGAN}
+    The main issue of \textbf{Pix2Pix} lies in the data collection phase, which in practice may prove to be very difficult due to the very specific nature of the needed images.
+
+    \textbf{CycleGAN} \cite{cyclegan} was proposed in 2017 to address this specific problem. In fact, it is able to be trained over two discrete and \textbf{unpaired collections of images}.
+
+    \img{styletransfer}
+
+    For instance, if we would like to train a network to map photographs to Monet paintings using only paired examples, then the dataset would have an upper bound in its cardinality (which is obviously given by the number of paintings made by Monet).
+\end{frame}
+
+\begin{frame}
+    \frametitle{Cycle-consistency}
+    Although we lack supervision in the form of paired examples we can still exploit \emph{supervision at the set level}: suppose we want to map $X \to Y$.
+
+    We can train a generator $G: X \to Y$ such that for $x \in X$ a discriminator is not able to tell the difference between $G(x)$ and $y \in Y$. However a so-defined $G$ is heavily susceptible to the well-known \textbf{mode collapse} issue.
+
+    More structure can be added by exploiting the fact that the output data should be \textbf{cycle-consistent} \cite{cyclegan}. Suppose we have an inverse relationship $F: Y \to X$, then the following should hold\footnote{Moreover, $F$ and $G$ are \emph{bijections}.}:
+    $$F(G(x)) \approx x \quad \forall x \in X \qquad G(F(y)) \approx y \quad \forall y \in Y$$
+
+    Taking all into account it is possible to build a stable architecture for unpaired image-to-image translation.
+\end{frame}
