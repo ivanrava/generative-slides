@@ -47,22 +47,87 @@
     \imgv{ae_latent_pca}
 \end{frame}
 
-{
-\setbeamercolor{background canvas}{bg=gray!20}
-\begin{frame}
-    \frametitle{Colab Notebook}
-    Practical activities:
+\begin{colab}
+    Outline / contents:
     \begin{itemize}
         \item Building and training an autoencoder over the Fashion MNIST dataset.
         \item Evaluating the model performance.
         \item Visualize the latent space in 2D.
     \end{itemize}
-    \colab{colab}
-\end{frame}
-}
+\end{colab}
 
 \subsection{Variational Autoencoders}
 
 \begin{frame}
-    \frametitle{Variational Autoencoders}
+    \frametitle{From autoencoders to VAEs}
+    The issue with ``classic'' autoencoders lies in their lack of a regularized latent space, which is free to be arranged in the best way as to reduce the loss. This hinders our generative capabilities using only the latent space representations.
+
+    Ideally we want the following properties to hold in our learnt latent space:
+    \begin{itemize}
+        \item \textbf{Continuity}: similar vectors in the latent space when decoded give back similar image data.
+        \item \textbf{Completeness}: once we sample a random point in the latent space we should be able to obtain a meaningful output out of it.
+        \item The latent space should preserve much of the original data structure.
+    \end{itemize}
+
+    The solution is to carefully \textbf{regularize} the training process. This is were VAEs come into play.
 \end{frame}
+
+\begin{frame}
+    \frametitle{Variational Autoencoders (VAEs)}
+    A \textbf{variational autoencoder / VAE} can be simply thought of as an autoencoder with a regularized training procedure specifically crafted to avoid overfitting and latent space discontinuities.
+
+    Variational autoencoders operate through probabilistic means:
+    \begin{enumerate}
+        \item The input $x$ is encoded as a distribution over the latent space. We can denote it as $p(z|x)$.
+        \item Next, we sample a point $z$ from $p(z|x)$.
+        \item Finally, we decode $z$. The decoder effectively learns the distribution $p(x|z)$.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Architecture}
+    In practice, the encoder part of the VAE encodes $x$ as $p(z|x)$ through $\mu$ and $\sigma^2$. $p(z|x)$ is usually modelled as a Gaussian, while \textbf{the regularization process lies in pushing this probability distribution as close as possible to a standard normal distribution}: $(\mu, \sigma^2) \to (0, 1)$.
+    \img{vae}
+\end{frame}
+
+\begin{frame}
+    \frametitle{VAE regularization}
+    Intuitively, only telling the model to learn latent representations as probability distributions does not stop it from overfit (for instance, it is still able to lock the distributions as punctual zones far away in the latent space).
+
+    Therefore we also need to enforce these distributions to resemble as much as possible to standard gaussians; this will also produce the desired effect of proximity in the latent space (specifically, close to the latent space \textbf{0}).
+    \img{vae_reg}
+\end{frame}
+
+\begin{frame}
+    \frametitle{VAE loss function}
+    Mathematically, we are able to establish a measure of similarity between two probability distributions using the \textbf{Kullback-Leibler divergence}:
+
+    $$KL[p,q] = \int_x p(x) \log{\frac{p(x)}{q(x)}}$$
+
+    Thus, the VAE loss function is the sum of the \textbf{reconstruction loss} and the \textbf{Kullback-Leibler divergence} between the Gaussian and the standard normal distributions.
+
+    $$L = \underbrace{\lVert x - d(z)\rVert_2^2}_{\text{Reconstruction}} + \underbrace{KL\left[\mathcal N(\mu, \sigma^2), \mathcal N(0,1)\right]}_{\text{Latent space regularization}}$$
+\end{frame}
+
+\begin{frame}
+    \frametitle{KL divergence in practice}
+    When $p$ and $q$ are $n$-dimensional Gaussian (and $q=\mathcal{N}(\textbf{0},\textbf{I})$), the following holds:
+
+    $$KL[p,q] = \frac 1 2 \left(\bm{\mu}_p \cdot \bm{\mu}_p + \text{tr}\{\Sigma_p\} - n - \log{|\Sigma_p|}\right)$$
+
+    If $n=1$ the equation simply boils down to:
+
+    $$KL[p,q] = \frac 1 2 \left(\mu_p^2 + \sigma^2_p - 1 - \log{|\sigma^2_p|}\right)$$
+
+    We will use the aforementioned results in the following Keras implementation.
+\end{frame}
+
+\begin{colab}
+    Outline / contents:
+    \begin{itemize}
+        \item Building and training a VAE over the Fashion MNIST dataset.
+        \item Evaluating the compression abilities of the VAE when used as an autoencoder.
+        \item Visualize the learnt latent space in 2D.
+        \item Verify the latent space continuity.
+    \end{itemize}
+\end{colab}

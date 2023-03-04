@@ -1,6 +1,7 @@
 \documentclass{beamer}
 \usetheme{Boadilla}
 \usecolortheme{beaver}
+\usepackage{bm}
 
 \newcommand{\img}[1]{\begin{center}
     \includegraphics[width=0.8\textwidth]{img/#1}
@@ -10,9 +11,18 @@
     \includegraphics[width=0.5\textwidth]{img/#1}
 \end{center}}
 
-\newcommand{\colab}[1]{\begin{center}
-    \includegraphics[width=0.3\textwidth]{img/#1}
-\end{center}}
+\newenvironment{colab}
+{
+\setbeamercolor{background canvas}{bg=gray!20}
+\begin{frame}
+    \frametitle{Colab Notebook}
+}
+{
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{img/colab}
+  \end{center}
+\end{frame}
+}
 
 
 \title[Image generation through DL]{Deep Learning approaches for Image Generation}
