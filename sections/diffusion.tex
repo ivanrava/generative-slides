@@ -2,7 +2,54 @@
     \frametitle{Introduction}
     \textbf{Diffusion models} were introduced in 2015, by inspiration from nonequilibrium thermodynamics.
 
-    These models work by progressively destroying the structure in data through iterative diffusions (e.g. through noising). Then the reverse generative process is learned from the training data.
+    These models work by \emph{progressively destroying} the structure in data through iterative diffusions (e.g. through noising). Then the reverse generative process (e.g. denoising) is learned from the training data.
 
-    The latent features in the dataset are learnt effectively model how the data ``diffuses'' in the latent space.
+    The latent features in the dataset which are learnt effectively model how the data ``diffuses'' in the latent space.
+
+    \img{diffusion}
+
+    In 2021 it was showed how diffusion models were able to surpass GANs on image synthesis tasks over a wide range of metrics. \cite{diffusion-gan}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Training in detail}
+
+    The training can be conceptualized as two subsequent phases:
+    \begin{enumerate}
+        \item The ``dataset building'' phase: we apply $T$ steps of Gaussian noise to the images $\textbf{x}_i \in X$. For each $t < T$ we obtain a target image for $\textbf{x}_i$. This means that \textbf{we are building many examples out of a single image} $\textbf{x}_i$.
+        \item The ``actual training'' phase: we train a neural network to denoise images, given a noised image with $t$ steps of Gaussian noise applied.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Diffusion process}
+    The diffusion process can be modeled as a \textbf{Markov chain}\footnote{Sequence of events, where the probability of each event only depends upon the previous one.}, which adds Gaussian noise at each step (the reverse process instead denoises the image).
+
+    An image $\textbf{x}_0$ is sampled from the real data distribution $q(x)$, while we denote $\textbf{x}_t$ the (noisy) image produced at step $t < T$ (where $T$ is the total number of Gaussian steps).
+
+    We model the distribution $q(\textbf{x}_t|\textbf{x}_{t-1})$ as a Gaussian with the following parameters ($\beta_t$ is the noise variance):
+    $$\mathcal{N}(\bm\mu_t=\sqrt{1-\beta_t}\textbf{x}_{t-1}, \Sigma_t = \beta_t \textbf{I})$$
+\end{frame}
+
+\begin{frame}
+    \frametitle{Diffusion process}
+    We can then express the posterior probability ``from $\textbf{x}_0$ to $\textbf{x}_T$'':
+    $$q(\textbf{x}_{1:T}|\textbf{x}_0)=\prod_{t=1}^T q(\textbf{x}_t | \textbf{x}_{t-1})$$
+    Through some reparameterization of $\{\beta_t\}$ to another parameter set $\{\alpha_t\}$ it is possible to compute the noisy image $\textbf{x}_t$ directly from $\textbf{x}_{0}$, without computing all the intermediate steps. In fact, we are able to directly sample the noise at step $t$.
+
+    Finally, the variance $\beta_t$ can be scheduled over the $T$, so as to obtain a monotonically increasing noise variance.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Compared to GANs}
+    Benefits:
+    \begin{itemize}
+        \item Capable of obtaining higher image quality.
+        \item Does not require adversarial training $\Rightarrow$ training is more stable.
+        \item Training can be easily parallelized.
+    \end{itemize}
+    Cons:
+    \begin{itemize}
+        \item Slower sampling.
+    \end{itemize}
 \end{frame}
