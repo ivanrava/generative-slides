@@ -4,7 +4,7 @@
 
     These models work by \emph{progressively destroying} the structure in data through iterative diffusions (e.g. through noising). Then the reverse generative process (e.g. denoising) is learned from the training data.
 
-    The latent features in the dataset which are learnt effectively model how the data ``diffuses'' in the latent space.
+    The latent features in the dataset which are learnt effectively model how the data ``diffuses'' in the latent space (hence the name).
 
     \img{diffusion}
 
@@ -12,32 +12,47 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Training in detail}
+    \frametitle{Training phase}
 
     The training can be conceptualized as two subsequent phases:
     \begin{enumerate}
-        \item The ``dataset building'' phase: we apply $T$ steps of Gaussian noise to the images $\textbf{x}_i \in X$. For each $t < T$ we obtain a target image for $\textbf{x}_i$. This means that \textbf{we are building many examples out of a single image} $\textbf{x}_i$.
-        \item The ``actual training'' phase: we train a neural network to denoise images, given a noised image with $t$ steps of Gaussian noise applied.
+        \item The ``dataset building'' phase: we apply $T$ steps of Gaussian noise to the images $\textbf{x}_i \in X$. For each $t < T$ we obtain a target image for $\textbf{x}_i$. This means that \textbf{we are building many examples out of a single image} $\textbf{x}_i$. Given $T \to \infty$ and a \emph{well behaved noise variance schedule} the last step will produce an \emph{isotropic Gaussian distribution}.
+        \item The ``actual training'' phase: we learn a process $p_\theta$ which is able to denoise noisy images.
     \end{enumerate}
+    \img{diffusion}
 \end{frame}
 
 \begin{frame}
     \frametitle{Diffusion process}
-    The diffusion process can be modeled as a \textbf{Markov chain}\footnote{Sequence of events, where the probability of each event only depends upon the previous one.}, which adds Gaussian noise at each step (the reverse process instead denoises the image).
+    The diffusion process can be formalized as a \textbf{Markov chain}\footnote{Sequence of events, where the probability of each event only depends upon the previous one.}, which adds Gaussian noise at each step.
 
-    An image $\textbf{x}_0$ is sampled from the real data distribution $q(x)$, while we denote $\textbf{x}_t$ the (noisy) image produced at step $t < T$ (where $T$ is the total number of Gaussian steps).
+    An image $\textbf{x}_0$ is sampled from the real data distribution $q(\textbf{x}_0)$, while we denote $\textbf{x}_t$ the (noisy) image produced at step $t < T$ (where $T$ is the total number of Gaussian steps).
 
-    We model the distribution $q(\textbf{x}_t|\textbf{x}_{t-1})$ as a Gaussian with the following parameters ($\beta_t$ is the noise variance):
+    \img{diffusion}
+
+    We model the forward diffusion process1 $q(\textbf{x}_t|\textbf{x}_{t-1})$ as a Gaussian with the following parameters ($0 < \beta_t < 1$ is the noise variance at step $t$):
     $$\mathcal{N}(\bm\mu_t=\sqrt{1-\beta_t}\textbf{x}_{t-1}, \Sigma_t = \beta_t \textbf{I})$$
 \end{frame}
 
-\begin{frame}
-    \frametitle{Diffusion process}
-    We can then express the posterior probability ``from $\textbf{x}_0$ to $\textbf{x}_T$'':
-    $$q(\textbf{x}_{1:T}|\textbf{x}_0)=\prod_{t=1}^T q(\textbf{x}_t | \textbf{x}_{t-1})$$
-    Through some reparameterization of $\{\beta_t\}$ to another parameter set $\{\alpha_t\}$ it is possible to compute the noisy image $\textbf{x}_t$ directly from $\textbf{x}_{0}$, without computing all the intermediate steps. In fact, we are able to directly sample the noise at step $t$.
+%\begin{frame}
+%    \frametitle{Diffusion process}
+%    We can then express the posterior probability ``from $\textbf{x}_0$ to $\textbf{x}_T$'':
+%    $$q(\textbf{x}_{1:T}|\textbf{x}_0)=\prod_{t=1}^T q(\textbf{x}_t | \textbf{x}_{t-1})$$
+%    Through some reparameterization of $\{\beta_t\}$ to another parameter set $\{\alpha_t\}$ it is possible to compute the noisy image $\textbf{x}_t$ directly from $\textbf{x}_{0}$, without computing all the intermediate steps. In fact, we are able to directly sample the noise at step $t$.
+%
+%    Finally, the variance $\beta_t$ can be scheduled over the $T$, so as to obtain a monotonically increasing noise variance.
+%\end{frame}
 
-    Finally, the variance $\beta_t$ can be scheduled over the $T$, so as to obtain a monotonically increasing noise variance.
+\begin{frame}
+    \frametitle{Backward process}
+    We can also model the backward process as a Gaussian distribution, however we will need a neural network to learn it ($\theta$ are the network parameters).
+    $$p_\theta (\textbf{x}_{t-1}| \textbf{x}_t) = \mathcal N\left(\mu_\theta(\textbf{x}_t, t), \Sigma_\theta (\textbf{x}_t, t))\right)$$
+    The network will learn both $\mu_\theta$ and $\Sigma_\theta$\footnote{Early architectures proposed to keep $\Sigma_\theta$ fixed.}, which are conditioned by the noise level $t$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Loss function}
+    The 
 \end{frame}
 
 \begin{frame}
